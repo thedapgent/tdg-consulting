@@ -255,15 +255,26 @@ export default function LandingPage() {
   const scrollToForm = () => formRef.current?.scrollIntoView({ behavior: "smooth" });
   const scrollToServices = () => servicesRef.current?.scrollIntoView({ behavior: "smooth" });
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setSending(true);
-    setTimeout(() => {
-      setSending(false);
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setSending(true);
+  try {
+    const response = await fetch('https://formspree.io/f/xpqnbkgg', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(form),
+    });
+    if (response.ok) {
       setSubmitted(true);
-    }, 1400);
-  };
-
+    } else {
+      alert('Something went wrong. Please try again.');
+    }
+  } catch (err) {
+    alert('Something went wrong. Please try again.');
+  } finally {
+    setSending(false);
+  }
+};
   return (
     <>
       <style>{FONTS}</style>
